@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { WorkflowsServiceService } from './workflows-service.service';
+import { Controller, Get } from '@nestjs/common'
+import { WorkflowsServiceService } from './workflows-service.service'
 
 @Controller()
 export class WorkflowsServiceController {
-  constructor(private readonly workflowsServiceService: WorkflowsServiceService) {}
+	constructor(
+		private readonly workflowsServiceService: WorkflowsServiceService
+	) {}
 
-  @Get()
-  getHello(): string {
-    return this.workflowsServiceService.getHello();
-  }
+	@Get()
+	getHello(): string {
+		return this.workflowsServiceService.getHello()
+	}
 }

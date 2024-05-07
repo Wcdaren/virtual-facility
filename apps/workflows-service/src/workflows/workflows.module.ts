@@ -1,9 +1,12 @@
-import { Module } from '@nestjs/common';
-import { WorkflowsService } from './workflows.service';
-import { WorkflowsController } from './workflows.controller';
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { Workflow } from './entities/workflow.entity'
+import { WorkflowsController } from './workflows.controller'
+import { WorkflowsService } from './workflows.service'
 
 @Module({
-  controllers: [WorkflowsController],
-  providers: [WorkflowsService],
+	imports: [TypeOrmModule.forFeature([Workflow])],
+	controllers: [WorkflowsController],
+	providers: [WorkflowsService]
 })
 export class WorkflowsModule {}
