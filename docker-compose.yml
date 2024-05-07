@@ -7,13 +7,14 @@ services:
       dockerfile: ./Dockerfile
       args:
         - APP_NAME=workflows-service
-    command: npm run start:dev -- workflows-service # This instructs Docker Compose to run the "start:dev" script when starting the container
+    command: yarn start:dev -- workflows-service # This instructs Docker Compose to run the "start:dev" script when starting the container
     environment: # Here we specify the environment variables that will be passed to the container
       - POSTGRES_HOST=workflows-db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=workflows
+      - NATS_URL=nats://nats:4222
     volumes:
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -24,6 +25,7 @@ services:
       - ./apps/workflows-service:/usr/src/app/apps/workflows-service
     depends_on: # This instructs Docker Compose to start the "workflows-db" container before starting the "workflows-service" container
       - workflows-db
+      - nats
   workflows-db:
     image: postgres:13.2-alpine
     environment: # We need to make sure these environment variables match the ones we specified in the "workflows-service" service
@@ -36,7 +38,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - APP_NAME=virtual-facility
-    command: npm run start:dev -- virtual-facility
+    command: yarn start:dev -- virtual-facility
     ports:
       - 3000:3000 # This instructs Docker Compose to map port 3000 on the host to port 3000 on the container
     environment:
@@ -45,6 +47,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=virtual-facility
+      - NATS_URL=nats://nats:4222
     volumes:
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -54,9 +57,12 @@ services:
     depends_on:
       - virtual-facility-db
       - workflows-service
+      - nats
   virtual-facility-db:
     image: postgres:13.2-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=virtual-facility
+  nats:
+    image: nats:2.2.2-alpine
