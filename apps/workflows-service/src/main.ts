@@ -11,15 +11,13 @@ async function bootstrap() {
 		{
 			transport: Transport.RMQ,
 			options: {
-				urls: [process.env.RABBITMQ_URL],
-				queue: 'workflows-service'
+				urls: [process.env.RABBITMQ_URL]
 			}
 		},
 		{ inheritAppConfig: true }
 	)
 	await app.startAllMicroservices()
 	await app.listen(3001)
-	console.log(`Application is running on: ${await app.getUrl()}`)
 }
 
-let ignore = bootstrap()
+bootstrap()
