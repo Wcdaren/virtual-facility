@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common'
+import { ScheduleModule } from '@nestjs/schedule'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { WorkflowsServiceController } from './workflows-service.controller'
 import { WorkflowsServiceService } from './workflows-service.service'
 import { WorkflowsModule } from './workflows/workflows.module'
 import { HealthModule } from './health/health.module';
+import { InboxModule } from './inbox/inbox.module';
 
 @Module({
 	imports: [
+		ScheduleModule.forRoot(),
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			host: process.env.POSTGRES_HOST,
@@ -18,7 +21,8 @@ import { HealthModule } from './health/health.module';
 			synchronize: true
 		}),
 		WorkflowsModule,
-		HealthModule
+		HealthModule,
+		InboxModule
 	],
 	controllers: [WorkflowsServiceController],
 	providers: [WorkflowsServiceService]

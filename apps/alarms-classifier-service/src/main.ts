@@ -6,20 +6,18 @@ import { AlarmsClassifierServiceModule } from './alarms-classifier-service.modul
 async function bootstrap() {
 	const app = await NestFactory.create(AlarmsClassifierServiceModule)
 	app.useGlobalPipes(new ValidationPipe())
-
 	app.connectMicroservice<MicroserviceOptions>(
 		{
 			transport: Transport.NATS,
 			options: {
 				servers: process.env.NATS_URL,
-				queue: 'workflows-service'
+				queue: 'alarms-classifier-service'
 			}
 		},
 		{ inheritAppConfig: true }
 	)
 	await app.startAllMicroservices()
 	await app.listen(3000)
-	console.log(`Application is running on: ${await app.getUrl()}`)
 }
 
 bootstrap()
