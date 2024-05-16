@@ -30,7 +30,7 @@ export class OutboxProcessor {
 		this.logger.debug(`Processing outbox messages`)
 
 		const messages = await this.outboxService.getUnprocessedMessage({
-			target: WORKFLOWS_SERVICE,
+			target: WORKFLOWS_SERVICE.description,
 			take: 100
 		})
 		await Promise.all(

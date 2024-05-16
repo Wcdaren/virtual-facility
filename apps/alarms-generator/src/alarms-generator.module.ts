@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { AlarmsGeneratorService } from './alarms-generator.service'
+import { TracingModule } from '@app/tracing'
 import { ALARMS_SERVICE } from './constants'
 
 @Module({
@@ -15,7 +16,8 @@ import { ALARMS_SERVICE } from './constants'
 					servers: process.env.NATS_URL
 				}
 			}
-		])
+		]),
+		TracingModule
 	],
 	controllers: [],
 	providers: [AlarmsGeneratorService]
